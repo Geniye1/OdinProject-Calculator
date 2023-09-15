@@ -20,7 +20,7 @@
         <div class="button-container">
             <button data-value="C" class="calculator-button operator">C</button>
             <button data-value="√" class="calculator-button operator">√</button>
-            <button data-value="%" class="calculator-button operator">%</button>
+            <button data-value="del" class="calculator-button operator">del</button>
             <button data-value="÷" class="calculator-button operator">÷</button>
             <button data-value="7" class="calculator-button digit">7</button>
             <button data-value="8" class="calculator-button digit">8</button>
@@ -36,7 +36,8 @@
             <div class="calculator-button button-spacer"></div>
             <button data-value="+" class="calculator-button addition-button operator">+</button>
             <button data-value="0" class="calculator-button digit">0</button>
-            <button data-value="." class="calculator-button operator">.</button>
+            <!--Not a digit, but acts as one to simplify the logic in typing decimals-->
+            <button data-value="." class="calculator-button digit">.</button> 
             <button data-value="=" class="calculator-button operator">=</button>
         </div>
     </div>

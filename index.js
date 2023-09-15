@@ -12,9 +12,19 @@
 
 'use strict'
 
+// NOTE ON DECIMALS: The decimal is tagged with the class 'digit' so it will get processed here alongside the
+// actual digit buttons. Because I'm just treating every digit as a string, there's no extra logic needed to reall 
+// handle the decimal other than making sure they can't type more than one decimal point.
 function processDigitButtonEvent(digitButton) {
     let currentDigit = digitButton.dataset.value;
+
+    if (currentDigit == ".") {
+        if (currentNumberString.includes(".")) {
+            return;
+        }
+    }
     currentNumberString += currentDigit;
+    
     displayToScreen(currentNumberString);
 }
 
@@ -22,7 +32,7 @@ function processDigitButtonEvent(digitButton) {
 // This is operate() im just not calling it that so it matches the pattern of the above function's name
 function processOperatorButtonEvent(currentOperatorButton) {
 
-    // Handle 'C' first so that it doesn't get cached and you can avoid doing all the below logic if
+    // Handle the special operators first so that it doesn't get cached and you can avoid doing all the below logic if
     // the user just wants to clear the calculator
     let currentOperatorValue = currentOperatorButton.dataset.value.toString();
     if (currentOperatorValue == "C") {
@@ -31,6 +41,25 @@ function processOperatorButtonEvent(currentOperatorButton) {
         currentNumberString = "";
         displayToScreen("0");
         return;
+    }
+    else if (currentOperatorValue == "√") {
+        let currentNumberValue = parseFloat(getScreenDisplayValue());
+        if (currentNumberValue < 0) {
+            displayToScreen("bro... cmon...");
+            return;
+        }
+        result = Math.sqrt(currentNumberValue);
+        displayToScreen(result);
+        return;
+    }
+    else if (currentOperatorValue == "del") {
+        if (currentNumberString.length > 1) {
+            let currentNumberStringArray = currentNumberString.split("");
+            currentNumberStringArray.pop();
+            currentNumberString = currentNumberStringArray.join("");
+            displayToScreen(currentNumberString);
+            return;
+        }
     }
 
     // Regardless of the operator, numberString needs to be passed to a, b, or c
@@ -43,8 +72,7 @@ function processOperatorButtonEvent(currentOperatorButton) {
         return;
     }
     
-    // If an operator HAS been cached then it is time to perform a calculation using it (for now disregarding the operator
-    // the user has clicked on currently)
+    // If an operator HAS been cached then they must have pressed one of the basic operator buttons, handle it
     switch (cachedOperator) {
         case "+":
             result = (result == 0? a + b : result + c);
@@ -56,6 +84,12 @@ function processOperatorButtonEvent(currentOperatorButton) {
             result = (result == 0? a * b : result * c);
             break;
         case "÷":
+            // DO NOT LET THEM DIVIDE BY 0
+            if (b == 0 || c == 0) {
+                displayToScreen("bro... cmon...");
+                return;
+            }
+            console.log("DIVIDNG")
             result = (result == 0? a / b : result / c);
             break;
     }
@@ -81,6 +115,10 @@ function processOperatorButtonEvent(currentOperatorButton) {
 
 function displayToScreen(value) {
     outputText.textContent = value.toString();
+}
+
+function getScreenDisplayValue() {
+    return outputText.textContent;
 }
 
 // This function will handle the passing of the typed string to the internal variables used for calculations
