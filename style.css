@@ -104,3 +104,15 @@ body {
     left: 317px;    
     top: 415px; 
 }
+
+.C-button {
+    background-color: orange;
+}
+
+.C-button:hover {
+    background-color: rgb(255, 183, 50);
+}
+
+.C-button:active {
+    background-color: rgb(172, 112, 0);
+}
