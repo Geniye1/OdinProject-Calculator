@@ -1,14 +1,16 @@
 /*
     Flow of code:
-    1. Click digit, populate num1 with this value and push it to the output text
+    1. Click digit, populate a with this value and push it to the output text
     2. Click desired operator, populate operator with this value
-    3. Click second digit, populate num2 with this value and push it to the output text
+    3. Click second digit, populate b with this value and push it to the output text
     4. Regardless of whether the user clicks '=' or another operator, the next
     button push needs to calculate the expression typed in so far and set the 
     output text to the result.
     5. Keep looping until they hit the '=', then reset the calculator (not the output text)
-    setting num1, num2, result, and operator back to default values.
+    setting a, b, result, and operator back to default values.
 */
+
+'use strict'
 
 function processDigitButtonEvent(digitButton) {
     let currentDigit = digitButton.dataset.value;
@@ -34,7 +36,6 @@ function processOperatorButtonEvent(currentOperatorButton) {
     switch (cachedOperator) {
         case "+":
             result = (result == 0? a + b : result + c);
-            console.log("a: " + a + ", b: " + b + ", result: " + result);
             break;
         case "-":
             result = (result == 0? a - b : result - c);
@@ -53,10 +54,10 @@ function processOperatorButtonEvent(currentOperatorButton) {
     // in the next operation.
     let currentOperatorValue = currentOperatorButton.dataset.value.toString();
     if (currentOperatorValue == "=") {
-        a = b = c = cachedOperator = undefined;
+        cachedOperator = undefined;
         currentNumberString = "";
         displayToScreen(result);
-        result = 0;
+        //result = 0;
         return;
     }
     else if (currentOperatorValue == "C") {
@@ -82,14 +83,16 @@ function displayToScreen(value) {
 function updateNumbers() {
     if (a == undefined)      a = parseFloat(currentNumberString);
     else if (b == undefined) b = parseFloat(currentNumberString);
-    else                     console.log("SETTING C"); c = parseFloat(currentNumberString);
+    else                     c = parseFloat(currentNumberString);
 
     currentNumberString = "";
 }
 
 // 'a' and 'b' are the first two digits in the expression, 'c' is a placeholder for all extra values that 
 // are entered afterwards and if used to operate on result - which is obtained after the operation between a and b are calculated
-let a = b = c = undefined;
+let a = undefined;
+let b = undefined;
+let c = undefined;
 let result = 0;
 let cachedOperator = undefined;
 
