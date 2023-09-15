@@ -22,12 +22,24 @@ function processDigitButtonEvent(digitButton) {
 // This is operate() im just not calling it that so it matches the pattern of the above function's name
 function processOperatorButtonEvent(currentOperatorButton) {
 
+    // Handle 'C' first so that it doesn't get cached and you can avoid doing all the below logic if
+    // the user just wants to clear the calculator
+    let currentOperatorValue = currentOperatorButton.dataset.value.toString();
+    if (currentOperatorValue == "C") {
+        a = b = c = cachedOperator = undefined;
+        result = 0;
+        currentNumberString = "";
+        displayToScreen("0");
+        return;
+    }
+
     // Regardless of the operator, numberString needs to be passed to a, b, or c
     updateNumbers();
 
     // If this is the first operation, all it needs to do is cache it then move on
     if (cachedOperator == undefined) {
         cachedOperator = currentOperatorButton.dataset.value.toString();
+        console.log(`CACHING ${cachedOperator}`);
         return;
     }
     
@@ -52,19 +64,11 @@ function processOperatorButtonEvent(currentOperatorButton) {
     // expression. If so (i.e. operator is '='), then display the final result and reset the calculator to it's default state
     // If the user clicks any other operator (other than clear), then it shoudl merely cache the result so it can be used
     // in the next operation.
-    let currentOperatorValue = currentOperatorButton.dataset.value.toString();
     if (currentOperatorValue == "=") {
         cachedOperator = undefined;
         currentNumberString = "";
         displayToScreen(result);
         //result = 0;
-        return;
-    }
-    else if (currentOperatorValue == "C") {
-        a = b = c = cachedOperator = undefined;
-        result = 0;
-        currentNumberString = "";
-        displayToScreen("0");
         return;
     }
     else
